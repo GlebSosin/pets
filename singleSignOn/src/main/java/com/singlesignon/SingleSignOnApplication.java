@@ -1,13 +1,13 @@
-package com.example.demo;
+package com.singlesignon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import rest.LoginController;
+import com.singlesignon.rest.LoginController;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = LoginController.class)
+@ComponentScan(basePackages = "com.singlesignon")
 public class SingleSignOnApplication {
 
 	public static void main(String[] args) {
