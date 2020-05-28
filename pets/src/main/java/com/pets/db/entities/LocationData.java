@@ -18,10 +18,13 @@ public class LocationData {
 	
 	@OneToOne(mappedBy = "locationData")
     private User user;
+	
 	@Column(name = "contry")
 	private String contry;
+	
 	@Column(name = "city")
 	private String city;
+
 	@Column(name = "street")
 	private String street;
 	

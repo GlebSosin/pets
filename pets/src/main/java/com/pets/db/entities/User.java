@@ -1,5 +1,7 @@
 package com.pets.db.entities;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -17,20 +20,31 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	@Column(name = "name")
 	private String name;
+	
 	@Column(name = "surname")
 	private String surname;
+	
 	@Column(name = "email", unique = true)
 	private String email;
+	
 	@Column(name = "phone_number")
 	private String phoneNumber;
+	
 	@Column(name = "image_url")
 	private String imageUrl;
+	
+	@Column(name = "locale")
+	private String locale;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "location_id", referencedColumnName = "id")
 	private LocationData locationData;
+	
+	@OneToMany(mappedBy="user")
+	private Set<Pet> pets;
 
 	public User() {}
 	
@@ -88,10 +102,14 @@ public class User {
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
-	@Column(name = "locale")
-	private String locale;
 	
-	
-	//Setters, getters and constructors
+
+	public Set<Pet> getPets() {
+		return pets;
+	}
+
+	public void setPets(Set<Pet> pets) {
+		this.pets = pets;
+	}
 	
 }
