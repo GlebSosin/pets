@@ -1,35 +1,39 @@
-package com.singlesignon.rest;
+package com.pets.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfoplus;
+import com.pets.db.entities.User;
+import com.pets.db.repositorys.UserRepository;
 
-@RestController
-public class LoginController {
+@Service
+public class UserService {
 	
 	@Autowired
 	private OAuth2AuthorizedClientService clientService;
+	@Autowired
+	private UserRepository userRepository;
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@GetMapping("/")
-	public String all() {
-		String result = "";
+
+	public User saveGoogleUserIfNeeded() {
+		User user = null;
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
@@ -43,12 +47,20 @@ public class LoginController {
 				.setApplicationName("Oauth2").build();
 		try {
 			Userinfoplus userinfo = oauth2.userinfo().get().execute();
-			result = userinfo.toPrettyString();
+			user = userRepository.findByEmail(userinfo.getEmail());
+			if (user == null) {
+				logger.info("saving new user: {}", userinfo.toPrettyString());
+				user = userRepository.save(new User(userinfo.getGivenName(), userinfo.getFamilyName(),
+						userinfo.getEmail(), "", userinfo.getPicture(), userinfo.getLocale()));
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("failed to save google user: {}", e.toString());
 		}
-		return result;
+
+		return user;
 	}
 
+	
+	
+	
 }

@@ -1,17 +1,15 @@
-package com.singlesignon;
+package com.pets;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.singlesignon.rest.LoginController;
-
 @SpringBootApplication
-@ComponentScan(basePackages = "com.singlesignon")
-public class SingleSignOnApplication {
+@ComponentScan(basePackages = "com.pets")
+public class PetsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SingleSignOnApplication.class, args);
+		SpringApplication.run(PetsApplication.class, args);
 	}
 
 }

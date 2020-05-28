@@ -1,4 +1,4 @@
-package com.singlesignon.configuration;
+package com.pets.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
