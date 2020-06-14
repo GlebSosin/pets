@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
+server:
+  port: 5000
+
+app:
+  datasource:
+    jdbc-url:jdbc: adopttydb.ctnzncgoeofh.us-east-1.rds.amazonaws.com:5432/postgres
+    username: adopttyAdmin
+    password: adopttyAdmin
+    pool-size: 30
